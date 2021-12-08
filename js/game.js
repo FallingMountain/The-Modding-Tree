@@ -52,10 +52,11 @@ function getNextAt(layer, canMax=false, useType = null) {
 	if (type=="static") 
 	{
 		if (!tmp[layer].canBuyMax) canMax = false
-		let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0).div(tmp[layer].directMult)
+		let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte_tolerance(tmp[layer].nextAt))?tmp[layer].resetGain:0).div(tmp[layer].directMult)
 		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult)
 		let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires)
 		if (tmp[layer].roundUpCost) cost = cost.ceil()
+		cost = cost.round()
 		return cost;
 	} else if (type=="normal"){
 		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult)
@@ -120,7 +121,7 @@ function canReset(layer)
 	else if(tmp[layer].type == "normal")
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
 	else if(tmp[layer].type== "static")
-		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
+		return tmp[layer].baseAmount.gte_tolerance(tmp[layer].nextAt) 
 	else 
 		return false
 }

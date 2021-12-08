@@ -16,12 +16,12 @@ addLayer("Miniprestige", {
     exponent: 1, // Prestige currency exponent
     base: 3,
     effect() {
-        return player.Nanoprestige.points.plus(1)
+        return player.Miniprestige.points.plus(1)
     },
     effectDescription() {
         var desc;
         desc = "which are multiplying Point gain by "
-        desc += format(tmp.Microprestige.effect) + "x"
+        desc += format(tmp.Miniprestige.effect) + "x"
         return desc
     },
     branches: ["Microprestige"],
@@ -45,7 +45,6 @@ addLayer("Miniprestige", {
     ],
     
     upgrades: {
-        
         11: {
             name: "Minirelax",
             title: "Minirelax",
@@ -113,7 +112,7 @@ addLayer("Miniprestige", {
         21: {
             name: "Dynamic upgrades",
             done() {return hasUpgrade("Microprestige", 13)},
-            tooltip: "Get the third Microprestige upgrade."
+            tooltip: "Get the third Microprestige upgrade. You now keep Nanoprestige upgrades on Microprestige resets."
         },
         23: {
             name: "Not so nano",
@@ -157,17 +156,17 @@ addLayer("Miniprestige", {
             tooltip: "Get 3 Miniprestiges. You now keep Micro upgrades on Miniprestige."
 
         },
-        42: {
-            name: "Y2K",
-            done() {return player.Nanoprestige.points.gte(2000)},
-            tooltip: "Get 2000 Nanoprestiges."
+        43: {
+            name: "Buy and rebuy",
+            done() {return player.Nanoprestige.points.gte(4000)},
+            tooltip: "Get 4000 Nanoprestiges."
         },
         44: {
             name: "Life, the Universe, and Everything",
             done() {return player.Microprestige.points.gte(42)},
             tooltip: "Get 42 Microprestiges."
         },
-        43: {
+        42: {
             name: "Infinity?",
             done() {return player.points.gte("1.79e308")},
             tooltip: "Get over 1.79e308 points."

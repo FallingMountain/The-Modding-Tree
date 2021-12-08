@@ -7,18 +7,27 @@ let modInfo = {
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 1,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3b",
-	name: "Small hotfix",
+	num: "0.3.1",
+	name: "The Great Rebalance",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>Ping @Falling Mountain#4706 on discord to report bugs!</h3><br>
+	<h3>v0.3.1</h3><br>
+		Pre-Smallprestige:<br>
+		- Upgrades have changed:
+		- Most have reduced costs, and changed effects.
+		- Buyables now have much different cost scalings.
+		- 2nd (Nano) buyable now increases in power every time you gain an upgrade.
+		- 3rd buyable buffed.
+		- 4th buyable increases the power of the 3rd buyable.
+		- Challenges can now be completed multiple times for extra rewards.
 	<h3>v0.3b</h3><br>
 		- Fixed upgrade problems from last hotfix.<br><br>
 	<h3>v0.3a</h3><br>
@@ -76,33 +85,31 @@ function getPointGen() {
 
 	let gain = new Decimal(1)
 	gain = gain.times(tmp.Nanoprestige.effect)
-	if (hasUpgrade("Nanoprestige", 11) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 12) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 21) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 22) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 13) && !inChallenge("Nanoprestige", 21) && !inChallenge("Nanoprestige", 12)) gain = gain.times(buyableEffect("Nanoprestige", 11))
-	if (hasUpgrade("Nanoprestige", 33) && !inChallenge("Nanoprestige", 21) && !inChallenge("Nanoprestige", 12)) gain = gain.times(buyableEffect("Nanoprestige", 12))
-	if (hasUpgrade("Nanoprestige", 31) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 32) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 24) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 45) && !inChallenge("Nanoprestige", 21)) gain = gain.times(7)
-	if (hasUpgrade("Nanoprestige", 64) && !inChallenge("Nanoprestige", 21)) gain = gain.times(upgradeEffect("Nanoprestige", 64))
+	if (hasUpgrade("Nanoprestige", 11)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 12)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 21)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 22)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 13)  && !inChallenge("Nanoprestige", 12)) gain = gain.times(buyableEffect("Nanoprestige", 11))
+	if (hasUpgrade("Nanoprestige", 33)  && !inChallenge("Nanoprestige", 12)) gain = gain.times(buyableEffect("Nanoprestige", 12))
+	if (hasUpgrade("Nanoprestige", 31)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 32)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 24)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 45)) gain = gain.times(7)
+	if (hasUpgrade("Nanoprestige", 64)) gain = gain.times(upgradeEffect("Nanoprestige", 64))
 	gain = gain.times(tmp.Microprestige.effect)
 	if (hasUpgrade("Microprestige", 11)) gain = gain.times(7)
-	if (hasUpgrade("Microprestige", 21)) gain = gain.times(upgradeEffect("Microprestige", 21))
 	if (hasUpgrade("Microprestige", 22)) gain = gain.times(upgradeEffect("Microprestige", 22))
 	if (hasUpgrade("Microprestige", 23)) gain = gain.times(upgradeEffect("Microprestige", 23))
 	if (hasUpgrade("Microprestige", 31)) gain = gain.times(7)
 	if (hasUpgrade("Microprestige", 32)) gain = gain.times(2401)
 	if (hasUpgrade("Microprestige", 33)) gain = gain.times(upgradeEffect("Microprestige", 33))
 	if (hasUpgrade("Microprestige", 14)) gain = gain.times(buyableEffect("Microprestige", 11))
-	gain = gain.times(player.Miniprestige.points.plus(1))
+	gain = gain.times(tmp.Miniprestige.effect)
 	if (hasAchievement("Miniprestige", 31)) gain = gain.times(7)
 	if (hasAchievement("Miniprestige", 31)) gain = gain.times(7)
 	if (hasAchievement("Smallprestige", 11)) gain = gain.times(Decimal.pow("1e25", player.Smallprestige.points.plus(1)))
 	if (hasChallenge("Nanoprestige", 11)) gain = gain.pow(1.1)
-	if (hasChallenge("Nanoprestige", 21)) gain = gain.pow(1.1)
-	if (hasUpgrade("Nanoprestige", 52) && !inChallenge("Nanoprestige", 21) && !inChallenge("Nanoprestige", 12)) gain = gain.pow(buyableEffect("Nanoprestige", 22))
+	//if (hasChallenge("Nanoprestige", 21)) gain = gain.pow(1.1)
 	if (hasUpgrade("Nanoprestige", 75)) gain = gain.pow(1.15)
 	if (inChallenge("Nanoprestige", 11)) gain = gain.pow(0.1)
 	if (gain.gte("1e10000")) {
@@ -190,7 +197,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.Partialprestige.points.gte(new Decimal(1))
+	return player.Miniprestige.points.gte(new Decimal(4))
 }
 
 

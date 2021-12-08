@@ -27,8 +27,7 @@ addLayer("Microprestige", {
     branches: ["Nanoprestige"],
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-        if (hasUpgrade("Nanoprestige", 14)) mult = mult.div(1.3)
-        if (hasUpgrade("Nanoprestige", 24)) mult = mult.div(1.3)
+        if (hasUpgrade("Nanoprestige", 24)) mult = mult.div(2)
         if (hasUpgrade("Nanoprestige", 34)) mult = mult.div(buyableEffect("Nanoprestige", 13))
         if (hasUpgrade("Nanoprestige", 43)) mult = mult.div(buyableEffect("Nanoprestige", 21))
         if (hasUpgrade("Nanoprestige", 15)) mult = mult.div(upgradeEffect("Nanoprestige", 15))
@@ -41,6 +40,7 @@ addLayer("Microprestige", {
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
         mult = new Decimal(1)
+        if (challengeCompletions("Nanoprestige", 11) >= 3) mult = mult.times(1.3)
         if (hasUpgrade("Nanoprestige", 53)) mult = mult.times(1.3)
         if (hasUpgrade("Microprestige", 24)) mult = mult.times(1.5)
         if (hasUpgrade("Nanoprestige", 65)) mult = mult.times(1.5)
@@ -238,26 +238,26 @@ addLayer("Microprestige", {
                 return player[this.layer].points.add(1);
 
             },
-            unlocked() {return player.Miniprestige.points.gte(1)},
+            unlocked() {return hasAchievement("Unlockers", 11)},
         },
         12: {
             name: "Micropush",
             title: "Micropush",
             description: "Nanoprestige cost is divided by 3.",
             cost: new Decimal(5),
-            unlocked() {return player.Miniprestige.points.gte(1)},
+            unlocked() {return hasAchievement("Unlockers", 11)},
         },
         13: {
             name :"Micromint",
             title: "Micromint",
-            description: "Nanoprestige cost divided by nanoprestiges. Upgrades no longer reset on Microprestige.",
+            description: "Nanoprestige cost divided by Nanoprestige's effect.",
             cost: new Decimal(6),
             
             effect() {
-                return player.Nanoprestige.points.plus(1);
+                return tmp.Nanoprestige.effect;
             },
-            effectDisplay() {return "/"+format(player.Nanoprestige.points.plus(1))},
-            unlocked() {return player.Miniprestige.points.gte(1)},
+            effectDisplay() {return "/"+format(tmp.Nanoprestige.effect)},
+            unlocked() {return hasAchievement("Unlockers", 11)},
         },
         14: {
             name:"Microhelp",
@@ -269,20 +269,16 @@ addLayer("Microprestige", {
         21: {
             name:"Microgesture",
             title:"Microgesture",
-            description: "Unlock a new set of Nano upgrades, and Nanoprestiges give a bigger boost to point gain.",
+            description: "Unlock a new set of Nano upgrades, and Nanoprestige effect increased ^2",
             cost: new Decimal(7),
-            effect() {
-                return player.Nanoprestige.points.plus(1);
-            },
-            effectDisplay() {return "x"+format(player.Nanoprestige.points.plus(1))},
-            unlocked() {return hasUpgrade("Nanoprestige", 33)}
+            unlocked() {return hasAchievement("Unlockers", 13)}
         },
         22: {
             name:"Microagression",
             title:"Microagression",
-            description: "Microprestiges give a bigger boost to point gain, and unlock new Nanoprestige upgrades.",
-            cost: new Decimal(11),
-            unlocked() {return hasAchievement("Miniprestige", 31)},
+            description: "Microprestiges give a bigger boost to point gain, and increase the base of Nanobuff.",
+            cost: new Decimal(10),
+            unlocked() {return hasAchievement("Unlockers", 15)},
             effect() {
                 var eff = new Decimal(10).pow(player.Microprestige.points.plus(1))
                 if (hasUpgrade("Microprestige", 31)) eff = eff.pow(2)
@@ -303,7 +299,7 @@ addLayer("Microprestige", {
                     eff = eff.pow(0.1)
                     eff = eff.mul("1e1000")
                 }
-                return "x" + format(eff);
+                return "x" + format(eff) + " to points";
             },
 
         },
@@ -311,18 +307,18 @@ addLayer("Microprestige", {
             name: "Microstrawman",
             title: "Microstrawman",
             description: "Miniprestiges give a bigger boost to point gain, and unlock new Nanoprestige upgrades.",
-            cost: new Decimal(15),
-            unlocked() {return hasAchievement("Miniprestige", 31)},
+            cost: new Decimal(18),
+            unlocked() {return hasAchievement("Unlockers", 15)},
             effect() { 
                 var eff = new Decimal(1e10).pow(player.Miniprestige.points.plus(1))
-                if (hasUpgrade("Microprestige", 32)) eff = eff.pow(2)
+                if (hasUpgrade("Microprestige", 32)) eff = eff.pow(1.3)
                 if (hasUpgrade("Miniprestige", 12)) eff = eff.pow(2)
                 if (hasUpgrade("Nanoprestige", 62)) eff = eff.pow(3)
                 return eff;
             },
             effectDisplay() {
                 var eff = new Decimal(1e10).pow(player.Miniprestige.points.plus(1))
-                if (hasUpgrade("Microprestige", 32)) eff = eff.pow(2)
+                if (hasUpgrade("Microprestige", 32)) eff = eff.pow(1.3)
                 if (hasUpgrade("Miniprestige", 12)) eff = eff.pow(2)
                 return "x" + format(eff);
             }
@@ -339,25 +335,25 @@ addLayer("Microprestige", {
         31: {
             name: "Microlove",
             title: "Microlove",
-            description: "Square Microagression, and multiply Point gain by 7.",
-            cost: new Decimal(29),
-            unlocked() {return hasAchievement("Miniprestige", 31) && hasAchievement("Miniprestige", 41)},
+            description: "Raise Microagression to ^2.",
+            cost: new Decimal(30),
+            unlocked() {return hasAchievement("Unlockers", 22)},
         },
         32: {
             name: "Microhate",
             title: "Microhate",
-            description: "Square Microstrawman, and multiply Point gain by 2401.",
-            cost: new Decimal(36),
-            unlocked() {return hasAchievement("Miniprestige", 31) && hasAchievement("Miniprestige", 41)}
+            description: "Raise Microstrawman to ^1.3, and multiply Point gain by 2401.",
+            cost: new Decimal(42),
+            unlocked() {return hasAchievement("Unlockers", 22)}
         },
         33: {
             name: "Microshove",
             title: "Microshove",
             description: "Multiply point gain based on Micro upgrades gained. Add new Nano upgrades.",
-            cost: new Decimal(42),
-            unlocked() {return hasAchievement("Miniprestige", 41)},
-            effect() {return new Decimal(1e7).pow(player.Microprestige.upgrades.length)},
-            effectDisplay() {return "x" + format(new Decimal(1e7).pow(player.Microprestige.upgrades.length))}
+            cost: new Decimal(43),
+            unlocked() {return hasAchievement("Unlockers", 22)},
+            effect() {return new Decimal(1e3).pow(player.Microprestige.upgrades.length)},
+            effectDisplay() {return "x" + format(new Decimal(1e3).pow(player.Microprestige.upgrades.length))}
         },
         34: {
             name: "Micronano",
@@ -398,7 +394,7 @@ addLayer("Microprestige", {
             name: "Microlife",
             title: "Microlife",
             description: "Improve Nanoprestige Points' formula by a small amount,.",
-            cost: new Decimal(1065),
+            cost: new Decimal(1480),
             unlocked() {return hasUpgrade("Miniprestige", 21)}
         },
         25: {
@@ -457,7 +453,7 @@ addLayer("Microprestige", {
             description: "Microprestiges boost Microprestige Point gain.",
             cost: new Decimal(150000),
             effect() {
-                return player.Microprestige.points.pow(1/4)
+                return player.Microprestige.points.pow(1/4).plus(1)
             },
             effectDisplay() {return format(upgradeEffect("Microprestige", 54)) + "x"},
             unlocked() {return hasMilestone("BrokenMicro", 1)},
