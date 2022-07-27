@@ -80,6 +80,76 @@ addLayer("Achievements", {
                 height:"128px"
             }
         },
+        23: {
+            name: "Haha! I did it! Oh, wait, no, there's still four more layers.",
+            done() {return false},
+            tooltip: "Full prestige for the first time. Makes Full Prestiges boost production."
+            ,
+            image() {
+                if (hasAchievement("Achievements", 23)) return "js/images/Achievements/ach22.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        31: {
+            name: "Another layer with M? This is getting out of hand",
+            done() {return false},
+            tooltip: "Multiprestige for the first time. Makes Multiprestiges boost production."
+            ,
+            image() {
+                if (hasAchievement("Achievements", 31)) return "js/images/Achievements/ach22.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        32: {
+            name: "Oh, so like ADHD?",
+            done() {return false},
+            tooltip: "Hyperprestige for the first time. Makes Hyperprestiges boost production."
+            ,
+            image() {
+                if (hasAchievement("Achievements", 32)) return "js/images/Achievements/ach22.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        33: {
+            name: "Pretend I said something funny here",
+            done() {return false},
+            tooltip: "Ultraprestige for the first time. Makes Ultraprestiges boost production."
+            ,
+            image() {
+                if (hasAchievement("Achievements", 33)) return "js/images/Achievements/ach22.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        41: {
+            name: "FINALE",
+            done() {return false},
+            tooltip: "Final prestige for the first time. Ends the game."
+            ,
+            image() {
+                if (hasAchievement("Achievements", 41)) return "js/images/Achievements/ach22.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"384px",
+                height:"384px"
+            }
+        },
 
     },
     tabFormat: {
@@ -377,6 +447,78 @@ addLayer("Unlockers", {
             tooltip: "1 Partialprestige. Unlocks a buyable for Miniprestige, and a few upgrades.",
             image() {
                 if (hasAchievement("Unlockers", 45)) return "js/images/Unlockers/unl45.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        46: {
+            done() {return hasUpgrade("CMEnlarge", 11)},
+            tooltip: "Purchase NANO ENLARGEMENT. Unlocks Nano upgrades 91, 92, 93, 94, and 95.",
+            image() {
+                if (hasAchievement("Unlockers", 46)) return "js/images/Unlockers/unl46.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        51: {
+            done() {return hasUpgrade("CMEnlarge", 31)},
+            tooltip: "Purchase MICRO ENLARGEMENT. Unlocks Micro upgrades 61, 62, 63, 64, and 65.",
+            image() {
+                if (hasAchievement("Unlockers", 51)) return "js/images/Unlockers/unl51.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        52: {
+            done() {return hasUpgrade("CMEnlarge", 32)},
+            tooltip: "Purchase MINI ENLARGEMENT. Unlocks Mini upgrades 31, 32, 33, 34, and 35.",
+            image() {
+                if (hasAchievement("Unlockers", 52)) return "js/images/Unlockers/unl52.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        53: {
+            done() {return hasUpgrade("CMEnlarge", 33)},
+            tooltip: "Purchase SMALL ENLARGEMENT. Unlocks Small upgrades 11, 12, 13, 14, and 15.",
+            image() {
+                if (hasAchievement("Unlockers", 53)) return "js/images/Unlockers/unl53.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        54: {
+            done() {return hasUpgrade("CMEnlarge", 51)},
+            tooltip: "Purchase BUYABLE ENLARGEMENT. Unlocks 1 buyable in Nano, Micro, and Broken Nano, and 2 in Mini",
+            image() {
+                if (hasAchievement("Unlockers", 54)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        55: {
+            done() {return hasUpgrade("Smallprestige", 11)},
+            tooltip: "Purchase Smallprestige upgrade 11. Unlocks the Small Force minigame.",
+            image() {
+                if (hasAchievement("Unlockers", 55)) return "js/images/Unlockers/unl54.png"
                 else return "js/images/noUnlock.png"
             },
             style: {

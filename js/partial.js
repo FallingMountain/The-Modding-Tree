@@ -60,7 +60,46 @@ addLayer("Partialprestige", {
             done() {return player.BrokenMicro.unlocked},
             tooltip: "Unlock Cascaded Micro. Buying Broken Nano buyables sets their amount to their maximum.",
             image() {
-                if (hasAchievement("Partialprestige", 11)) return "js/images/Partialprestige/partial12.png"
+                if (hasAchievement("Partialprestige", 12)) return "js/images/Partialprestige/partial12.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        13: {
+            name: "Infinite Magnitude",
+            done() {return player.points.gte("e1.79e308")},
+            tooltip: "Get more than e1.79e308 points. Smallprestige no longer resets Miniprestige upgrades.",
+            image() {
+                if (hasAchievement("Partialprestige", 13)) return "js/images/Partialprestige/partial12.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        14: {
+            name: "The illusion...",
+            done() {return hasUpgrade("CMEnlarge", 31) || hasUpgrade("CMEnlarge", 32) || hasUpgrade("CMEnlarge", 33)},
+            tooltip: "Purchase one of the row 2 Enlargement upgrades. You can bulk buy Smallprestige.",
+            image() {
+                if (hasAchievement("Partialprestige", 14)) return "js/images/Partialprestige/partial12.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        15: {
+            name: "...of free choice.",
+            done() {return hasUpgrade("CMEnlarge", 51)},
+            tooltip: "Purchase all five of the normal Enlargement upgrades.",
+            image() {
+                if (hasAchievement("Partialprestige", 15)) return "js/images/Partialprestige/partial12.png"
                 else return "js/images/unearn.png"
             },
             style: {

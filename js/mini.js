@@ -38,6 +38,7 @@ addLayer("Miniprestige", {
         mult = new Decimal(1)
         if (hasMilestone("BNCapital", 0)) mult = mult.times(Decimal.min(2, new Decimal(1.22).pow(player.BNCapital.points)))
         if (hasUpgrade("Microprestige", 54)) mult = mult.times(upgradeEffect("Microprestige", 54))
+        if (hasUpgrade("Smallprestige", 11)) mult = mult.times(tmp.Smallprestige.smallForcePow)
         return mult
     },
     row: 2, // Row the layer is in on the tree (0 is the first row)
@@ -127,7 +128,7 @@ addLayer("Miniprestige", {
             description: "Break Constant is multiplied based on communals & time since last Communal.",
             effect() {
                 var addOns = player.BNCommunal.points
-                if (hasUpgrade("Microprestige", 53)) addOns = addOns.plus(player.BNCapital.points)
+                if (hasUpgrade("Microprestige", 53)) addOns = addOns.plus(player.BNCapital.points.plus(1))
                 var effect = new Decimal(player.BNCommunal.resetTime).plus(1).pow(new Decimal(1).plus(addOns))
                 if (hasUpgrade("Microprestige", 51)) effect = effect.pow(2401)
                 return effect
@@ -143,6 +144,7 @@ addLayer("Miniprestige", {
             cost: new Decimal(20000),
             unlocked() {return hasAchievement("Unlockers", 45)}
         },
+        /*
         24:{
             name: "Miniscule",
             title: "Miniscule",
@@ -154,6 +156,7 @@ addLayer("Miniprestige", {
             cost: new Decimal(200000),
             unlocked() {return hasAchievement("Unlockers", 45)}
         },
+        */
     },
     achievements:{
         11: {
@@ -343,7 +346,7 @@ addLayer("Miniprestige", {
         keep.push("achievements")
         if (layer.row == this.row) return
         else if (layer == "Smallprestige") {
-            if (hasUpgrade("Smallprestige", 21)) keep.push("upgrades")
+            if (hasAchievement("Partialprestige", 13)) keep.push("upgrades")
             layerDataReset(this.layer, keep)
         }
         else if (layer == "Partialprestige") {

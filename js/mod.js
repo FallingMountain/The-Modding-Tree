@@ -13,12 +13,28 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.4 Beta",
-	name: "Introduction to the Cascade",
+	num: "0.4.0 Beta",
+	name: "Fleshed Out",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>Ping @Falling Mountain#4706 on discord to report bugs!</h3><br>
+	<h3>v0.4</h3><br>
+		Fleshed Out<br>
+		- 5 new Nanoprestige upgrades<br>
+		- 5 new Microprestige upgrades<br>
+		- 5 new Miniprestige upgrades<br>
+		- 5 new Smallprestige upgrades<br>
+		- 5 new Cascading Micro upgrades<br>
+		- Additional buyables and milestones <br>
+		- Enlargement upgrade tree, with more to come! <br>
+		- Filled out the normal Achievement page <br>
+		- Added two new Partial achievements, for buying Enlargement upgrades <br>
+		- Added a third new Partial achievement for point gain <br>
+		- Added five new Unlockers <br>
+		- Fixed bug where Nanomuscle would remain active in Nano challenge 12<br>
+		- Fixed bug where [S] Cascade would show as unlocked after Partialprestiging for the first time <br>
+		- The ability to buy max Nanoprestiges has been moved to Nano upgrade 13 rather than 23. <br> <br>
 	<h3>v0.3.4</h3><br>
 		Introduction to the Cascade<br>
 		- Added 2 new layers, Cascade & Enlargement <br>
@@ -146,7 +162,7 @@ function getPointGen() {
 	if (hasChallenge("Nanoprestige", 11)) gain = gain.pow(1.1)
 	if (hasUpgrade("Nanoprestige", 75)) gain = gain.pow(1.15)
 	if (inChallenge("Nanoprestige", 11)) gain = gain.pow(0.1)
-
+if (hasUpgrade("Nanoprestige", 94)) gain = gain.pow(upgradeEffect("Nanoprestige", 94))
 	if (inChallenge("Microprestige", 11)) gain = gain.pow(0.01)
 	return gain
 }
@@ -157,12 +173,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame at 5 Smallprestiges!", "If things feel slow, check your challenges!"
+	"Current endgame at 25 Smallprestiges!", "If things feel slow, check your challenges!"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.Smallprestige.points.gte(new Decimal(10))
+	return player.Smallprestige.points.gte(new Decimal(25))
 }
 
 
@@ -182,6 +198,17 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
-	
+	if (oldVersion == "0.3.4 Beta") {
+		player.CMEnlarge.points = new Decimal(0)
+		player.CMEnlarge.milestones = []
+		player.BrokenMicro.buyables[11] = new Decimal(0)
+		player.BrokenMicro.buyables[21] = new Decimal(0)
+		player.BrokenMicro.buyables[22] = new Decimal(0)
+		if (hasUpgrade("Miniprestige", 24)) player.Miniprestige.upgrades.pop()
+		player.points = new Decimal(0)
+		player.Nanoprestige.points = new Decimal(0)
+		player.BrokenMicro.points = new Decimal(0)
+		player.Microprestige.points = new Decimal(0)
+	}
 
 }
