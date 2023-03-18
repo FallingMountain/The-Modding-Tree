@@ -57,6 +57,7 @@ function buyUpg(layer, id) {
 	if (!tmp[layer].upgrades[id].unlocked) return
 	if (player[layer].upgrades.includes(id)) return
 	if (upg.canAfford === false) return
+	if (layer == "Nanoprestige") setNanoUpgradeMultiplier();
 	let pay = layers[layer].upgrades[id].pay
 	if (pay !== undefined)
 		run(pay, layers[layer].upgrades[id])

@@ -3,7 +3,7 @@ let modInfo = {
 	id: "alterPrestige",
 	author: "Falling Mountain, original Prestige by Makiki99",
 	pointsName: "points",
-	modFiles: ["nano.js", "tree.js", "micro.js", "mini.js", "small.js", "partial.js", "achievements.js"],
+	modFiles: ["nano.js", "nanoExtra.js", "whatsthepoint.js", "tree.js", "micro.js", "mini.js", "small.js", "partial.js", "achievements.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -147,6 +147,8 @@ function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
 }
 
+
+
 // Determines if it should show points/sec
 function canGenPoints(){
 	return true
@@ -180,17 +182,34 @@ function getPointGen() {
 	if (hasAchievement("Miniprestige", 31)) gain = gain.times(49)
 	if (hasAchievement("Smallprestige", 11)) gain = gain.times(Decimal.pow("1e25", player.Smallprestige.points.plus(1)))
 	gain = gain.times(tmp.Partialprestige.effect)
+	// Powers.
 	if (hasChallenge("Nanoprestige", 11)) gain = gain.pow(1.1)
 	if (hasUpgrade("Nanoprestige", 75)) gain = gain.pow(1.15)
+	if (hasMilestone("nanoCube1", 0)) gain = gain.pow(tmp.Microprestige.effect.pow(tmp.nanoCube1.milestones[0].effect))
+	// Dilation.
 	if (hasAchievement("Unlockers", 54)) {
 		gain = gain.log10()
-		gain = gain.pow(buyableEffect("Nanoprestige", 33))
+		if (hasUpgrade("Miniprestige", 15)) gain = gain.pow(Decimal.pow(7, player.Miniprestige.upgrades.length - 11))
+		if (hasMilestone("nanoCube1", 0)) gain = gain.pow(tmp.Miniprestige.effect.pow(tmp.nanoCube1.milestones[0].effect))
 		gain = Decimal.pow(10, gain)
 	}
 	if (inChallenge("Nanoprestige", 11)) gain = gain.pow(0.1)
 if (hasUpgrade("Nanoprestige", 94)) gain = gain.pow(upgradeEffect("Nanoprestige", 94))
 	if (inChallenge("Microprestige", 11)) gain = gain.pow(0.05)
-	if (player.points.log10().gte(gain.log10().pow(1.5)) && player.Partialprestige.points.gte(1)) player.points = gain
+	if (player.points.plus(1).log10().gte(gain.log10().pow(1.5)) && player.Partialprestige.points.gte(1)) player.points = gain
+	if (inChallenge("Minigames", 11)) {
+		gain = new Decimal(1)
+		gain = gain.times(tmp.wtpNano.effect)
+		gain = gain.times(tmp.wtpMicro.effect)
+		gain = gain.times(tmp.nanoExtra.effect)
+		if (hasUpgrade("wtpNano", 11)) gain = gain.times(7)
+		if (hasUpgrade("wtpNano", 12)) gain = gain.times(7)
+		if (hasUpgrade("wtpNano", 21)) gain = gain.times(7)
+		if (hasUpgrade("wtpNano", 22)) gain = gain.times(7)
+		if (hasUpgrade("wtpNano", 13)) gain = gain.times(buyableEffect("wtpNano", 11))
+		if (hasUpgrade("wtpMicro", 11)) gain = gain.times(343)
+		if (hasUpgrade("wtpNano", 31)) gain = gain.times(upgradeEffect("wtpNano", 31))
+	}
 	return gain
 }
 

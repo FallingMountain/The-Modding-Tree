@@ -56,6 +56,8 @@ addLayer("Miniprestige", {
                 if (hasUpgrade("Miniprestige", 31)) costBase = costBase.minus(0.03)
                 if (hasUpgrade("Microprestige", 55)) costExp = costExp.minus(0.02)
                 if (hasUpgrade("Miniprestige", 31)) costExp = costExp.minus(0.08)
+                if (player.Miniprestige.buyables[11].gte(33)) costExp = costExp.plus(0.10)
+                if (player.Miniprestige.buyables[11].gte(34)) costExp = costExp.plus(player.Miniprestige.buyables[11].minus(33).times(0.01))
                 var cost = new Decimal("1000").plus(Decimal.pow(costBase, Decimal.pow(x, costExp)))
                 if (hasUpgrade("Miniprestige", 31)) cost = cost.pow(0.98)
                 return Decimal.floor(cost);
@@ -81,13 +83,16 @@ addLayer("Miniprestige", {
             effect() {
                 var timeBase = new Decimal(player.Miniprestige.resetTime)
                 if (hasUpgrade("Miniprestige", 32)) timeBase = timeBase.times(Decimal.pow(2, player.Miniprestige.upgrades.length - 7))
+                if (hasUpgrade("Miniprestige", 25)) timeBase = timeBase.times(Decimal.pow(3, player.Miniprestige.upgrades.length - 11))
                 var base = new Decimal(timeBase).pow(1.2).plus(1)
                 var timeCap = new Decimal(60)
                 if (hasUpgrade("Miniprestige", 32)) timeCap = timeCap.times(Decimal.pow(1.1, player.Miniprestige.upgrades.length - 7))
+                if (hasUpgrade("Miniprestige", 25)) timeCap = timeCap.times(Decimal.pow(0.8, player.Miniprestige.upgrades.length - 11))
                 if (hasUpgrade("Miniprestige", 31)) base = new Decimal(Decimal.min(player.Miniprestige.resetTime, 60)).pow(1.2).plus(1)
                 let eff = new Decimal(base).pow(player[this.layer].buyables[this.id])
                 if (hasUpgrade("Miniprestige", 14)) eff = new Decimal(base).pow(new Decimal(1.3).pow(player[this.layer].buyables[this.id]))
                 if (hasUpgrade("Miniprestige", 31)) eff = new Decimal(1.2).pow(base.times(new Decimal(1.3).pow(player[this.layer].buyables[this.id])))
+                if (eff.gte("1e1000000")) eff = eff.div("1e1000000").pow("0.1").times("1e1000000")
                 return eff
             },
             
@@ -117,6 +122,14 @@ addLayer("Miniprestige", {
             description: "Unlock some Broken Nanoprestige upgrades. Change the log10()s in Nano upgrade 64 to log2()s",
             cost: new Decimal(9),
             unlocked() {return hasUpgrade("Microprestige", 42)}
+        },
+        15: {
+            name: "Mininexus",
+            title: "Mininexus",
+            description: "Per Miniprestige upgrade over 11 dilate Point gain and raise NanoXVI power ^7",
+            cost: new Decimal("5e11"),
+            unlocked() {return hasAchievement("Unlockers", 54)}
+
         },
         21: {
             name: "Miniplead",
@@ -159,19 +172,21 @@ addLayer("Miniprestige", {
             cost: new Decimal(20000),
             unlocked() {return hasAchievement("Unlockers", 45)}
         },
-        /*
+        
         24:{
-            name: "Miniscule",
-            title: "Miniscule",
-            description: "Microprestige Fragments boost Break Constant and vice versa",
-            effect() {
-                return Decimal.log10(player.BrokenMicro.points.plus(10)).plus(1)
-            },
-            effectDisplay() {return "^"+format(upgradeEffect("Miniprestige", 24))+" & x"+ format(player.BrokenNano.points.plus(2).log2().plus(2).log2().plus(1))},
-            cost: new Decimal(200000),
+            name: "Miniluck",
+            title: "Miniluck",
+            description: "Per Miniprestige upgrade over 11 raise Microprestige effect ^7.",
+            cost: new Decimal(1e12),
             unlocked() {return hasAchievement("Unlockers", 45)}
         },
-        */
+        25: {
+            name: "Minibeat",
+            title: "Minibeat",
+            description: "Per Miniprestige upgrade over 11 multiply effect of time by 2x and reduce cap of time by 1.25x.",
+            cost: new Decimal(1.5e12),
+            unlocked() {return hasAchievement("Unlockers", 45)}
+        },
        31: {
             name: "Mini I",
             title: "Mini I",
@@ -230,6 +245,13 @@ addLayer("Miniprestige", {
                 var timeMax = new Decimal(60).times(Decimal.pow(1.1, player.Miniprestige.upgrades.length - 7))
                 return Decimal.min(player.Miniprestige.resetTime, timeMax).div(4)},
             effectDisplay() {return "-"+format(upgradeEffect("Miniprestige", 34))}
+        },
+        35: {
+            name: "MiniV",
+            title: "MiniV",
+            description: "Increase Cascade Rate by 0.25.",
+            cost: new Decimal(5e12),
+            unlocked() {return hasAchievement("Unlockers", 45)}
         },
     },
     automate() {
@@ -394,5 +416,5 @@ addLayer("Miniprestige", {
         }
     },
     layerShown(){
-        return player.Microprestige.best.gte(1) || player.Miniprestige.best.gte(1) || player. Smallprestige.best.gte(1)}
+        return (player.Microprestige.best.gte(1) || player.Miniprestige.best.gte(1) || player. Smallprestige.best.gte(1))&& !inChallenge("Minigames", 11)}
 })

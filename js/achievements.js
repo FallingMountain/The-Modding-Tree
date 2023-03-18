@@ -526,12 +526,167 @@ addLayer("Unlockers", {
                 height:"64px"
             }
         },
+        56: {
+            done() {return player.Partialprestige.points.gte(2)},
+            tooltip: "Get a second Partialprestige. Gives Micro upgrade 55 a cost.",
+            image() {
+                if (hasAchievement("Unlockers", 56)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        61: {
+            done() {return hasUpgrade("CMEnlarge", 61)},
+            tooltip: "Unlock EXPANSIONS. Unlocks Expansions, the NX layer, and you can buy max Micro buyables.",
+            image() {
+                if (hasAchievement("Unlockers", 61)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        62: {
+            done() {return hasUpgrade("Nanoprestige", 102)},
+            tooltip: "NanoXXII. Unlocks the first Columnal Upgrade.",
+            image() {
+                if (hasAchievement("Unlockers", 62)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        63: {
+            done() {return hasUpgrade("CMExpand", 11)},
+            tooltip: "Purchase Nano Expansion 1. Unlocks 5 Nano upgrades.",
+            image() {
+                if (hasAchievement("Unlockers", 63)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        64: {
+            done() {return player.wtpMicro.points.gte(1)},
+            tooltip: "1 Microprestige Point in What's the Point. Unlocks extra Nanoprestige upgrades in WTP.",
+            image() {
+                if (hasAchievement("Unlockers", 64)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        65: {
+            done() {return challengeCompletions("Minigames", 11) >= 1},
+            tooltip: "Complete What's the Point for the first time. (Come back after grabbing a few more Nano upgrades!) Unlocks a Renown buyable.",
+            image() {
+                if (hasAchievement("Unlockers", 65)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
+        66: {
+            done() {return hasUpgrade("nanoExtra", 11)},
+            tooltip: "Purchase Parallel. Unlocks the <em> What's the Point </em> challenge.",
+            image() {
+                if (hasAchievement("Unlockers", 66)) return "js/images/Unlockers/unl54.png"
+                else return "js/images/noUnlock.png"
+            },
+            style: {
+                width:"64px",
+                height:"64px"
+            }
+        },
     },
     tabFormat: {
-        "Unlockers": {content: ["resource-display",  "clickables", "achievements",],}
+        "Unlockers": {content: ["resource-display",  ["display-text", 
+        function() {return "Gathered "+ player.Unlockers.achievements.length  + "/35 Unlockers"}, { "font-size": "33px", "font-family": "Courier New"}], "blank",  "achievements",],}
 
 
     },
 
     layerShown(){return hasAchievement("Miniprestige", 11)}
+})
+
+
+addLayer("Minigames", {
+    name: "Minigames", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "MC", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: "side", // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+        maxInWTP: new Decimal(0)
+    }},
+    color: "#f65026",
+    tooltip: "",
+    checkWTPMax() {
+        if (inChallenge("Minigames", 11) && player.points.gt(player.Minigames.maxInWTP)) player.Minigames.maxInWTP = player.points
+    },
+    calculateWTPRenownMult() {
+        return player.Minigames.maxInWTP.plus(10).log10().pow(1/2)
+
+    },
+    challenges: {
+        11: {
+            name: "MINIGAME: What's The Point?",
+            challengeDescription: "All Static layers are Normal and vice versa. The price and effect of all upgrades and layers are significantly changed, and have significant softcaps. Renown multiplies Point gain at a significantly reduced rate, increasing per completion.",
+            goalDescription() {
+                var goal;
+                if (challengeCompletions("Minigames", 11) == 0) goal = new Decimal("1.00e100")
+                if (challengeCompletions("Minigames", 11) == 1) goal = new Decimal("1.79e308")
+                if (challengeCompletions("Minigames", 11) == 2) goal = new Decimal(1.8e39)
+                if (challengeCompletions("Minigames", 11) == 3) goal = new Decimal(3e83)
+                if (challengeCompletions("Minigames", 11) == 4) goal = new Decimal(7e188)
+                return format(goal) + " points (" + challengeCompletions("Minigames", 11) + "/5)"
+            },
+            canComplete() {
+                if (challengeCompletions("Minigames", 11) == 0) return player.points.gte(new Decimal("1e100"))
+                if (challengeCompletions("Minigames", 11) == 1) return player.points.gte(new Decimal("1.79e308"))
+                if (challengeCompletions("Minigames", 11) == 2) return player.points.gte(Decimal.dInf)
+                if (challengeCompletions("Minigames", 11) == 3) return player.points.gte(new Decimal(3e83))
+                if (challengeCompletions("Minigames", 11) == 4) return player.points.gte(new Decimal(7e188))
+            },
+            rewardDescription() {
+                let reward = "Multiply Renown gain based on your highest ever points in the challenge. Currently x" + format(tmp.Minigames.calculateWTPRenownMult) + ". "
+                if (challengeCompletions("Minigames", 11) == 0) reward += "Unlock a buyable which costs Renown and increases Cascade Constant exponent by 1.05x."
+                if (challengeCompletions("Minigames", 11) == 1) reward += "Unlock a buyable which increases the cap of CASCADE 11."
+                if (challengeCompletions("Minigames", 11) == 2) reward += "Unlock a buyable which multiplies Renown gain by 1.05x."
+                if (challengeCompletions("Minigames", 11) == 3) reward += "Unlock a buyable which increases the cap of CASCADE 21 and CASCADE 22."
+                if (challengeCompletions("Minigames", 11) == 4) reward += "Increase the power of Nanoprestige yet again."
+                return reward
+            },
+            onEnter() {
+                player.points = new Decimal(1)
+                player.wtpNano.points = new Decimal(0)
+                player.wtpNano.upgrades = []
+                player.wtpNano.buyables[11] = new Decimal(0)
+                player.wtpMicro.points = new Decimal(0)
+            },
+            unlocked() {return hasUpgrade("CMExpand", 11)},
+            completionLimit: 10,
+            style: {
+                width:"400px",
+                height:"300px"
+            },
+        },
+    },
+    tabFormat: {
+        "Minigame Collection": {content: ["challenges"],}
+
+
+    },
+    layerShown(){return hasAchievement("Unlockers", 66)}
 })

@@ -27,7 +27,6 @@ addLayer("Partialprestige", {
     },
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-        if (player.Partialprestige.points.equals(1)) mult = Decimal.dInf
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -107,6 +106,32 @@ addLayer("Partialprestige", {
                 height:"128px"
             }
         },
+        21: {
+            name: "Alterprestige: Part II",
+            done() {return player.Partialprestige.points.gte(2)},
+            tooltip: "Partialprestige a second time. Increases the Enlargement cap to 6, increase Cascade Rate by 0.25, you gain 10x more Small Force.",
+            image() {
+                if (hasAchievement("Partialprestige", 21)) return "js/images/Partialprestige/partial11.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
+        22: {
+            name: "Robot Language",
+            done() {return hasUpgrade("wtpNano", 31)},
+            tooltip: "Purchase <em>nano love</em> in the What's the Point challenge. Reward: Bonus levels in Broken Nano are raised to ^1.5.",
+            image() {
+                if (hasAchievement("Partialprestige", 22)) return "js/images/Partialprestige/partial11.png"
+                else return "js/images/unearn.png"
+            },
+            style: {
+                width:"128px",
+                height:"128px"
+            }
+        },
     },
     tabFormat: {
         "Upgrades": {
@@ -129,5 +154,5 @@ addLayer("Partialprestige", {
         }
     },
     layerShown(){
-        return player.Smallprestige.best.gte(4) || player.Partialprestige.best.gte(1)}
+        return (player.Smallprestige.best.gte(4) || player.Partialprestige.best.gte(1)) && !inChallenge("Minigames", 11)}
 })

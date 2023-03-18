@@ -53,6 +53,7 @@ addLayer("Smallprestige", {
             if (hasMilestone("Smallprestige", 2)) genAmount = genAmount.times(Decimal.pow(3, player.Smallprestige.milestones.length))
             if (hasUpgrade("Smallprestige", 14)) genAmount = genAmount.times(Decimal.pow(2, player.Smallprestige.upgrades.length))
             if (hasUpgrade("CMEnlarge", 51)) genAmount = genAmount.times(buyableEffect("Smallprestige", 13))
+            if (hasAchievement("Partialprestige", 21)) genAmount = genAmount.times(10)
             player.Smallprestige.smallForce = player.Smallprestige.smallForce.plus(genAmount.div(20))
             if (player.Smallprestige.smallForce.lt(0)) player.Smallprestige.smallForce = new Decimal(0)
         }
@@ -622,5 +623,5 @@ addLayer("Smallprestige", {
 
     },
     layerShown(){
-        return player.Miniprestige.best.gte(3) || player.Smallprestige.best.gte(1) || hasAchievement("Unlockers", 24)}
+        return (player.Miniprestige.best.gte(3) || player.Smallprestige.best.gte(1) || hasAchievement("Unlockers", 24)) && !inChallenge("Minigames", 11)}
 })
